@@ -1,0 +1,9 @@
+<div [formGroup]="tagsFormGroup">
+<mat-form-field appearance="legacy">
+    <mat-label>Tags</mat-label>
+    <mat-select class="input-full-width" formControlName="tags">
+        <mat-option *ngFor="let tag of tagList" [value]="tag">{{tag}}</mat-option>
+    </mat-select>                            
+    <mat-error *ngIf="tagsFormGroup.controls['tags'].hasError">Task tag/s are required.</mat-error>
+</mat-form-field>
+</div>
