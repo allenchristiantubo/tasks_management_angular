@@ -7,24 +7,24 @@
                     <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20">
                     <mat-form-field class="input-full-width" appearance="legacy">
                         <mat-label>Task Name</mat-label>
-                        <input matInput formControlName="name" placeholder="Task Name">
-                        <mat-error *ngIf="taskManagerFormGroup.controls['name'].hasError">Task name is required.</mat-error>
+                        <input matInput formControlName="taskName" placeholder="Task Name">
+                        <mat-error *ngIf="taskManagerFormGroup.controls['taskName'].hasError">Task name is required.</mat-error>
                     </mat-form-field>
                     <mat-form-field appearance="legacy">
                         <mat-label>Status</mat-label>
-                        <mat-select formControlName="status">
-                            <mat-option value="0" [disabled]="options.header === 'Update'">New</mat-option>
-                            <mat-option value="1" [disabled]="options.header === 'Create'">In Progress</mat-option>
-                            <mat-option value="2" [disabled]="options.header === 'Create'">Completed</mat-option>
+                        <mat-select formControlName="taskStatus">
+                            <mat-option value="New" [disabled]="options.header === 'Edit'">New</mat-option>
+                            <mat-option value="In Progress" [disabled]="options.header === 'Add'">In Progress</mat-option>
+                            <mat-option value="Completed" [disabled]="options.header === 'Add'">Completed</mat-option>
                         </mat-select>
-                        <mat-error *ngIf="taskManagerFormGroup.controls['status'].hasError">Task status is required.</mat-error>
+                        <mat-error *ngIf="taskManagerFormGroup.controls['taskStatus'].hasError">Task status is required.</mat-error>
                     </mat-form-field>
                     </div>
                     <div fxLayout="row" fxLayoutAlign=" none" >
                         <mat-form-field class="input-full-width" appearance="legacy">
                             <mat-label>Task Description</mat-label>
-                            <textarea matInput formControlName="description" placeholder="Task Description"></textarea>
-                            <mat-error *ngIf="taskManagerFormGroup.controls['description'].hasError">Task description is required.</mat-error>
+                            <textarea matInput formControlName="taskDescription" placeholder="Task Description"></textarea>
+                            <mat-error *ngIf="taskManagerFormGroup.controls['taskDescription'].hasError">Task description is required.</mat-error>
                         </mat-form-field>
                     </div>
                     <div>

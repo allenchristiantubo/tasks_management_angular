@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TaskConfirmationDialogComponent } from '../task-confirmation-dialog/task-confirmation-dialog.component';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import { tasks } from '../tasks';
+import { TasksService } from 'src/app/shared/services/task-manager/tasks.service';
 
 @Component({
   selector: 'app-task-dialog',
@@ -18,9 +20,9 @@ import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 export class TaskDialogComponent implements OnInit {
 
   taskManagerFormGroup = this._formBuilder.group({
-    name : [null, Validators.required],
-    description : [null, Validators.required],
-    status : [null, Validators.required]
+    taskName : [null, Validators.required],
+    taskDescription : [null, Validators.required],
+    taskStatus : [null, Validators.required]
   });
 
   tagsFormGroup = this._formBuilder.group({
@@ -28,7 +30,8 @@ export class TaskDialogComponent implements OnInit {
   });
 
   options: any;
-  constructor(private dialog: MatDialog, 
+  constructor(private taskService: TasksService,
+              private dialog: MatDialog, 
               private _formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<TaskDialogComponent>, // to close dialog
               @Inject(MAT_DIALOG_DATA) public data: any,) 
@@ -38,19 +41,25 @@ export class TaskDialogComponent implements OnInit {
 
   ngOnInit(): void {
     //this.setValue();
+    //console.log(this.options.task);
   }
 
   setValue(){
     //his.taskManagerFormGroup.controls['name'].setValue('');
   }
   save(action : string){
+    let task = this.taskManagerFormGroup.value;
+    let tag = this.tagsFormGroup.value;
+    // this.taskService.addTask(task);
     this.dialog.open(TaskConfirmationDialogComponent, {
       data: {action: action, header: action + " Task", content:"Success"}
     });
+
+    this.cancel(task);
   }
 
-  cancel(){
-    this.dialogRef.close()
+  cancel(data?:any, ){
+    this.dialogRef.close(data);
   }
 
   notify(event: string){

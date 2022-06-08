@@ -25,4 +25,8 @@ export class TaskConfirmationDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  close(){
+    this.dialogRef.close();
+  }
+
 }

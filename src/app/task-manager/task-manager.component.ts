@@ -1,26 +1,11 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TaskConfirmationDialogComponent } from './task-confirmation-dialog/task-confirmation-dialog.component';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
-
-export interface TaskData{
-  taskName: string;
-  taskDescription: string;
-  taskDateCreated: any;
-  taskDateModified: any;
-  taskDateCompleted: any;
-  taskTags: string;
-  taskStatus: string;
-}
-
-const TASK_DATA: TaskData[] = [
-  { taskName: "Learn C#", taskDescription: "Start Learning C#", taskDateCreated: "2022-05-25",taskDateModified : "2022-05-30", taskDateCompleted: "", taskTags: "Web Development", taskStatus: "In Progress"},
-  { taskName: "Learn ASP", taskDescription: "Start Learning ASP.Net", taskDateCreated: "2022-05-30", taskDateModified : "2022-05-31", taskDateCompleted: "", taskTags: "Web Development", taskStatus: "New"},
-  { taskName: "Code Review on Sorting", taskDescription: "View codes on sorting",taskDateCreated: "2022-05-20", taskDateModified : "2022-05-30", taskDateCompleted: "2022-05-31", taskTags: "Code Review", taskStatus: "Completed"},
-  { taskName: "Angular Design",  taskDescription: "Create landing and login page",taskDateCreated: "2022-05-30", taskDateModified: "2022-05-30", taskDateCompleted: "2022-05-31",taskTags: "Web Design",taskStatus: "Completed"},
-];
+import { TasksService } from '../shared/services/task-manager/tasks.service';
+import { TaskModel } from '../shared/models/task-model';
 
 @Component({
   selector: 'app-task-manager',
@@ -29,14 +14,18 @@ const TASK_DATA: TaskData[] = [
 })
 export class TaskManagerComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['taskName', 'taskDescription', 'taskDateCreated', 'taskDateModified','taskDateCompleted','taskTags', 'taskStatus', 'actions'];
-  dataSource = new MatTableDataSource(TASK_DATA);
+  displayedColumns: string[] = ['taskName', 'taskDescription', 'taskDateCreated', 'taskDateModified','taskDateCompleted','tags', 'taskStatus', 'actions'];
+  dataSource = new MatTableDataSource<TaskModel>();
+  clonedDataSource: TaskModel[] = [];
   
   filterValue : string = '';
   @ViewChild(MatPaginator) paginator! : MatPaginator;
   //this.dataSource.filterPredicate = (data: TaskData, filterValue : string ) => data.taskName.indexOf(filterValue) != 1;
-  constructor(private dialog: MatDialog ) { }
+  constructor(private dialog: MatDialog,
+              private taskService: TasksService,
+              private cd: ChangeDetectorRef) { }
   ngOnInit(): void {
+    this.populateTable();
     this.dataSource.filterPredicate = function(data, filter : string) : boolean {
       return data.taskStatus.toLowerCase().includes(filter)
     };
@@ -46,9 +35,22 @@ export class TaskManagerComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  openDialog(header : string){
+  openDialog(header : string, task?:any){
     const dialog = this.dialog.open(TaskDialogComponent, {
-      data : {header:header}
+      data : {header:header, task:task},
+    }).afterClosed().subscribe((data: any) =>{
+      if(data){
+        console.log(data);
+        if(header == 'Add'){
+          this.taskService.addTask(data)
+        } else if(header == 'Edit'){
+
+        }
+        // let tableData =  data as any;
+        // this.dataSource = new MatTableDataSource(tableData.data);
+        this.populateTable(true);
+        this.cd.detectChanges();
+      }
     });
   }
 
@@ -57,6 +59,12 @@ export class TaskManagerComponent implements OnInit, AfterViewInit {
       width:'300px',
       data: {action:'Delete', header:'Delete Task', content:'Are you sure?', confirmButton: 'Yes', cancelButton: 'No'}
     });
+  }
+
+  populateTable(isAction?:boolean): void{
+    let data = this.taskService.getTableData(isAction);
+    this.dataSource.data = data;
+    this.clonedDataSource = data;
   }
 
   search(){    

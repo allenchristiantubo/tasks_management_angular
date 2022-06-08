@@ -11,7 +11,6 @@ import { TaskDialogComponent } from './task-manager/task-dialog/task-dialog.comp
 import { TaskConfirmationDialogComponent } from './task-manager/task-confirmation-dialog/task-confirmation-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagsComponent } from './task-manager/tags/tags.component';
-
 @NgModule({
   declarations: [
     AppComponent,

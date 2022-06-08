@@ -18,6 +18,6 @@ export class TagsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.tagsFormGroup);
+    
   }
 }
