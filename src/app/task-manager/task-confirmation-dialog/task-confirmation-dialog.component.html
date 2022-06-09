@@ -1,13 +1,8 @@
-<div class="task-confirmation-dialog-container">
-    <div *ngIf="options.action === 'Delete'">
-        <h1>{{options.header}}</h1>
-        <h2>{{options.content}}</h2>
-        <button mat-button (click)="No()">{{options.cancelButton}}</button>
-        <button mat-button (click)="Yes()">{{options.confirmButton}}</button>
-    </div>
-    <div *ngIf="options.action !== 'Delete'">
-        <h1>{{options.header}}</h1>
-        <h2>{{options.content}}</h2>
-        <button mat-button (click)="close()">Close</button>
-    </div>
-</div>
+<ng-container class="task-confirmation-dialog-container">
+    <ng-container *ngIf="data.action === 'Delete'">
+        <h1>{{data.header + " Task"}}</h1>
+        <h2>{{data.content}}</h2>
+        <button mat-button (click)="No()">{{data.cancelButton}}</button>
+        <button mat-button (click)="Yes()">{{data.confirmButton}}</button>
+    <ng-container>
+</ng-container>

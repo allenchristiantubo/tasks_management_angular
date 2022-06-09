@@ -15,6 +15,7 @@ const requestOptions ={
 };
 
 const TASKS_API_URL = environment.api;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,9 +31,7 @@ export class TasksService {
   }
 
   getTableDataById(id:string): Observable<TaskModel[]>{
-    return this.http.get<TaskModel[]>(`${TASKS_API_URL}/${id}`).pipe(
-      map(tasks => tasks.filter(t => t.taskId === id))
-    )
+    return this.http.get<TaskModel[]>(`${TASKS_API_URL}/${id}`);
   }
   
   search(searchKey:string): Observable<TaskModel[]>{
@@ -52,41 +51,14 @@ export class TasksService {
   }
 
   addTask(data:any):Observable<TaskModel[]>{
-    let body: any = [data];
-    console.log(body)
-    return this.http.post<TaskModel[]>(TASKS_API_URL, body);
+    return this.http.post<TaskModel[]>(TASKS_API_URL, data, requestOptions);
   }
 
-  // editTask(task:any):void{
-  //   let index = this.tableData.findIndex(d => d.taskId == task.taskId)
-  //   this.tableData[index].taskName = task.taskName;
-  //   this.tableData[index].taskDescription = task.taskDescription;
-  //   this.tableData[index].taskStatus = task.taskStatus;
-  //   this.tableData[index].taskDateModified = new Date();
-  //   this.tableData[index].tags = task.tags;
-  //   if(task.taskStatus == 'Completed'){
-  //     this.tableData[index].taskDateCompleted = new Date();
-  //   }
-  //   else{
-  //     this.tableData[index].taskDateCompleted = null;
-  //   }
-    
-  // }
+  editTask(data:any, id:string):Observable<TaskModel[]>{
+    return this.http.put<TaskModel[]>(`${TASKS_API_URL}/${id}`, data, requestOptions);
+  }
 
-  // deleteTask(id:number):void{
-  //   this.tableData = this.tableData.filter(d => d.taskId != id);
-  // }
-  
-  // findTaskById(id:number):number{
-  //   if(id == 0)
-  //   {
-  //     this.tableData = tasks;
-  //   }
-  //   else
-  //   {
-  //     this.tableData = tasks;
-  //     this.tableData = this.tableData.filter(d => d.taskId == id);
-  //   }
-  //   return this.tableData.length;
-  // }
+  deleteTask(id:string):Observable<TaskModel[]>{
+    return this.http.delete<TaskModel[]>(`${TASKS_API_URL}/${id}`, requestOptions);
+  }
 }

@@ -1,18 +1,18 @@
 export interface TaskModel{
-    taskId: string;
+    taskId?: string;
     taskName: string;
     taskDescription: string;
     dateCreated: Date;
-    dateModified: Date;
-    dateFinished: Date | null;
-    status: TaskStatus;
+    dateModified?: Date;
+    dateFinished?: Date
+    status?: TaskStatus
     tag: ITags[];
 }
 
 export interface ITags{
-    tagId: string;
+    tagId?: string;
     tagName: string;
-    taskId: string;
+    taskId?: string;
 }
 
 export enum TaskStatus{

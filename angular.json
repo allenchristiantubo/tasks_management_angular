@@ -79,8 +79,7 @@
               "browserTarget": "tubo-task-manager:build:production"
             },
             "development": {
-              "browserTarget": "tubo-task-manager:build:development",
-              "proxyConfig": "src/proxy.conf.json"
+              "browserTarget": "tubo-task-manager:build:development"
             }
           },
           "defaultConfiguration": "development"

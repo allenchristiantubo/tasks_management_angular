@@ -8,25 +8,20 @@ import { tasks } from '../tasks';
   styleUrls: ['./task-confirmation-dialog.component.scss']
 })
 export class TaskConfirmationDialogComponent implements OnInit {
-  options: any;
   constructor(private dialog: MatDialog, 
               public dialogRef: MatDialogRef<TaskConfirmationDialogComponent>, // to close dialog
               @Inject(MAT_DIALOG_DATA) public data: any,) 
               { 
-                this.options = data;
+
               }
   ngOnInit(): void {
   }
 
   Yes(){
-    this.dialogRef.close(this.options.task);
+    this.dialogRef.close(this.data.task);
   }
 
   No(){
-    this.dialogRef.close();
-  }
-
-  close(){
     this.dialogRef.close();
   }
 

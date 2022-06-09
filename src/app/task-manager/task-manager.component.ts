@@ -32,27 +32,57 @@ export class TaskManagerComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  openDialog(header : string, task?:any){
-    const dialog = this.dialog.open(TaskDialogComponent, {
-      data : {header:header, task:task},
-    }).afterClosed().subscribe((data: any) =>{
-      if(data){
-        if(header == 'Add'){
-          this.taskService.addTask(data)
-        } else if(header == 'Edit'){
-          //this.taskService.editTask(data);
+  openDialog(header : string, id?:string){
+    if(header === 'Add'){
+      const dialog = this.dialog.open(TaskDialogComponent, {
+        data : {header:header},
+      }).afterClosed().subscribe((data: any) =>{ 
+        if(data){
+          this.taskService.addTask(data).subscribe( res =>{
+            this.populateTable();
+            this.cd.detectChanges();
+          });
         }
-        this.populateTable();
-        this.cd.detectChanges();
-      }
-    }, (error:any) => {
-      console.log(error);
+      });
+    }else if(header === 'Edit'){
+      this.taskService.getTableDataById(id).subscribe(res => {
+        const dialog = this.dialog.open(TaskDialogComponent,{
+          data : {header:header, task:res}
+        }).afterClosed().subscribe((data:any) =>{
+          if(data){
+            this.taskService.editTask(data,data.taskId).subscribe(res =>{
+              this.populateTable();
+              this.cd.detectChanges();
+            });
+          }
+        });
+      });
+    }
+  }
+
+  openDialogConfirmation(id:string){
+    this.taskService.getTableDataById(id).subscribe(res=>{
+      const dialog = this.dialog.open(TaskConfirmationDialogComponent, {
+        width:'300px',
+        data: {action:'Delete', header:'Delete', content:'Are you sure to delete task?', confirmButton: 'Yes', cancelButton: 'No', task:res}
+      }).afterClosed().subscribe((data:any) =>{
+        if(data){
+          this.taskService.deleteTask(data.taskId).subscribe(res => {
+            this.populateTable();
+            this.cd.detectChanges();
+          });
+        }
+      });
     });
   }
 
   populateTable(): void{
     this.taskService.getTableData().subscribe( data => {
-      this.dataSource.data = data;
+      if(data){
+        this.dataSource.data = data;
+      }else{
+        this.dataSource.data = null;
+      }
     });
   }
 
@@ -66,19 +96,4 @@ export class TaskManagerComponent implements OnInit, AfterViewInit {
       }
     })
   }
-
-  openDialogConfirmation(task:any){
-    // const dialog = this.dialog.open(TaskConfirmationDialogComponent, {
-    //   width:'300px',
-    //   data: {action:'Delete', header:'Delete', content:'Are you sure?', confirmButton: 'Yes', cancelButton: 'No', task:task}
-    // }).afterClosed().subscribe((data:any) =>{
-    //   if(data){
-    //     this.taskService.deleteTask(data.taskId);
-    //   }
-    //   this.populateTable();
-    //   this.cd.detectChanges();
-    // });
-  }
-
-  
 }

@@ -32,7 +32,7 @@
                     </div>
                 </form>
             </mat-step>
-            <mat-step [stepControl]="tagsFormGroup" label="Fillout tag field" errorMessage="Tags are required.">
+            <mat-step *ngIf="data.header ==='Add'" [stepControl]="tagsFormGroup" label="Fillout tag field" errorMessage="Tags are required.">
                 <form [formGroup]="tagsFormGroup">
                     <div fxLayout="row" fxLayoutAlign=" none" >
                         <app-tags [tagsFormGroup]="tagsFormGroup"></app-tags>
@@ -48,8 +48,8 @@
                 <div>
                     <button mat-button matStepperPrevious>Back</button>
                     <button mat-button (click)="cancel()">No</button>
-                    <button mat-button *ngIf="data.header =='Add'" (click)="save(data.header)">Yes</button>
-                    <button mat-button *ngIf="data.header =='Edit'" (click)="save(data.header, data.task.taskId)">Yes</button>
+                    <button mat-button *ngIf="data.header === 'Add'" (click)="save(data.header)">Yes</button>
+                    <button mat-button *ngIf="data.header === 'Edit'" (click)="save(data.header, data.task.taskId)">Yes</button>
                 </div>
             </mat-step>
         </mat-stepper>
