@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { tasks } from '../tasks';
 
 @Component({
   selector: 'app-task-confirmation-dialog',
@@ -18,7 +19,7 @@ export class TaskConfirmationDialogComponent implements OnInit {
   }
 
   Yes(){
-    this.dialogRef.close();
+    this.dialogRef.close(this.options.task);
   }
 
   No(){

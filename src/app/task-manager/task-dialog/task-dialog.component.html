@@ -1,5 +1,5 @@
 <div class="task-dialog-container">
-    <!-- <h1 mat-dialog-title>{{options.header}} Task</h1> -->
+    <h1 mat-dialog-title>{{data.header}} Task</h1>
     <mat-dialog-content>
         <mat-stepper linear="true" #stepper>
             <mat-step [stepControl]="taskManagerFormGroup" label="Fillout task fields" errorMessage="Task is required.">
@@ -10,14 +10,14 @@
                         <input matInput formControlName="taskName" placeholder="Task Name">
                         <mat-error *ngIf="taskManagerFormGroup.controls['taskName'].hasError">Task name is required.</mat-error>
                     </mat-form-field>
-                    <mat-form-field appearance="legacy">
+                    <mat-form-field appearance="legacy" *ngIf="data.header ==='Edit'">
                         <mat-label>Status</mat-label>
-                        <mat-select formControlName="taskStatus">
-                            <mat-option value="New" [disabled]="options.header === 'Edit'">New</mat-option>
-                            <mat-option value="In Progress" [disabled]="options.header === 'Add'">In Progress</mat-option>
-                            <mat-option value="Completed" [disabled]="options.header === 'Add'">Completed</mat-option>
+                        <mat-select formControlName="status">
+                            <mat-option value=0>New</mat-option>
+                            <mat-option value=1>In Progress</mat-option>
+                            <mat-option value=2>Completed</mat-option>
                         </mat-select>
-                        <mat-error *ngIf="taskManagerFormGroup.controls['taskStatus'].hasError">Task status is required.</mat-error>
+                        <mat-error *ngIf="taskManagerFormGroup.controls['status'].hasError">Task status is required.</mat-error>
                     </mat-form-field>
                     </div>
                     <div fxLayout="row" fxLayoutAlign=" none" >
@@ -48,7 +48,8 @@
                 <div>
                     <button mat-button matStepperPrevious>Back</button>
                     <button mat-button (click)="cancel()">No</button>
-                    <button mat-button (click)="save(options.header)">Yes</button>
+                    <button mat-button *ngIf="data.header =='Add'" (click)="save(data.header)">Yes</button>
+                    <button mat-button *ngIf="data.header =='Edit'" (click)="save(data.header, data.task.taskId)">Yes</button>
                 </div>
             </mat-step>
         </mat-stepper>

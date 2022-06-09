@@ -14,21 +14,18 @@ import { TaskModel } from '../shared/models/task-model';
 })
 export class TaskManagerComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['taskName', 'taskDescription', 'taskDateCreated', 'taskDateModified','taskDateCompleted','tags', 'taskStatus', 'actions'];
+  displayedColumns: string[] = ['taskName', 'taskDescription', 'taskDateCreated', 'taskDateModified','taskDateFinished','tags', 'taskStatus', 'actions'];
   dataSource = new MatTableDataSource<TaskModel>();
-  clonedDataSource: TaskModel[] = [];
   
-  filterValue : string = '';
+  searchKey : string = '';
   @ViewChild(MatPaginator) paginator! : MatPaginator;
-  //this.dataSource.filterPredicate = (data: TaskData, filterValue : string ) => data.taskName.indexOf(filterValue) != 1;
+
   constructor(private dialog: MatDialog,
               private taskService: TasksService,
               private cd: ChangeDetectorRef) { }
+
   ngOnInit(): void {
     this.populateTable();
-    this.dataSource.filterPredicate = function(data, filter : string) : boolean {
-      return data.taskStatus.toLowerCase().includes(filter)
-    };
   }
 
   ngAfterViewInit(): void {
@@ -40,36 +37,48 @@ export class TaskManagerComponent implements OnInit, AfterViewInit {
       data : {header:header, task:task},
     }).afterClosed().subscribe((data: any) =>{
       if(data){
-        console.log(data);
         if(header == 'Add'){
           this.taskService.addTask(data)
         } else if(header == 'Edit'){
-
+          //this.taskService.editTask(data);
         }
-        // let tableData =  data as any;
-        // this.dataSource = new MatTableDataSource(tableData.data);
-        this.populateTable(true);
+        this.populateTable();
         this.cd.detectChanges();
       }
+    }, (error:any) => {
+      console.log(error);
     });
   }
 
-  openDialogConfirmation(){
-    const dialog = this.dialog.open(TaskConfirmationDialogComponent, {
-      width:'300px',
-      data: {action:'Delete', header:'Delete Task', content:'Are you sure?', confirmButton: 'Yes', cancelButton: 'No'}
+  populateTable(): void{
+    this.taskService.getTableData().subscribe( data => {
+      this.dataSource.data = data;
     });
   }
 
-  populateTable(isAction?:boolean): void{
-    let data = this.taskService.getTableData(isAction);
-    this.dataSource.data = data;
-    this.clonedDataSource = data;
+  search(){
+    this.searchKey= this.searchKey.trim();
+    this.searchKey = this.searchKey.toLowerCase();
+    this.taskService.search(this.searchKey).subscribe(data =>{
+      if(data){
+        this.dataSource.data = data;
+        this.cd.detectChanges();
+      }
+    })
   }
 
-  search(){    
-    this.filterValue = this.filterValue.trim();
-    this.filterValue = this.filterValue.toLowerCase();
-    this.dataSource.filter = this.filterValue;
+  openDialogConfirmation(task:any){
+    // const dialog = this.dialog.open(TaskConfirmationDialogComponent, {
+    //   width:'300px',
+    //   data: {action:'Delete', header:'Delete', content:'Are you sure?', confirmButton: 'Yes', cancelButton: 'No', task:task}
+    // }).afterClosed().subscribe((data:any) =>{
+    //   if(data){
+    //     this.taskService.deleteTask(data.taskId);
+    //   }
+    //   this.populateTable();
+    //   this.cd.detectChanges();
+    // });
   }
+
+  
 }
