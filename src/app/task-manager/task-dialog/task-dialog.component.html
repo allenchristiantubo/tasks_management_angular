@@ -32,7 +32,7 @@
                     </div>
                 </form>
             </mat-step>
-            <mat-step *ngIf="data.header ==='Add'" [stepControl]="tagsFormGroup" label="Fillout tag field" errorMessage="Tags are required.">
+            <mat-step [stepControl]="tagsFormGroup" label="Fillout tag field" errorMessage="Tags are required.">
                 <form [formGroup]="tagsFormGroup">
                     <div fxLayout="row" fxLayoutAlign=" none" >
                         <app-tags [tagsFormGroup]="tagsFormGroup"></app-tags>

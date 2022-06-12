@@ -6,6 +6,7 @@ import { TaskConfirmationDialogComponent } from './task-confirmation-dialog/task
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { TasksService } from '../shared/services/task-manager/tasks.service';
 import { TaskModel } from '../shared/models/task-model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-manager',
@@ -22,7 +23,9 @@ export class TaskManagerComponent implements OnInit, AfterViewInit {
 
   constructor(private dialog: MatDialog,
               private taskService: TasksService,
-              private cd: ChangeDetectorRef) { }
+              private cd: ChangeDetectorRef,
+              private _route: ActivatedRoute,
+              private _router: Router) { }
 
   ngOnInit(): void {
     this.populateTable();
@@ -80,8 +83,6 @@ export class TaskManagerComponent implements OnInit, AfterViewInit {
     this.taskService.getTableData().subscribe( data => {
       if(data){
         this.dataSource.data = data;
-      }else{
-        this.dataSource.data = null;
       }
     });
   }
@@ -95,5 +96,13 @@ export class TaskManagerComponent implements OnInit, AfterViewInit {
         this.cd.detectChanges();
       }
     })
+  }
+
+  onAdd(){
+    this._router.navigate(['/tasks']);
+  }
+  
+  onEdit(id:string){
+    this._router.navigate(['/tasks/'+id]);
   }
 }

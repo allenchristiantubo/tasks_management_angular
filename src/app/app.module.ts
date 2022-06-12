@@ -12,6 +12,8 @@ import { TaskConfirmationDialogComponent } from './task-manager/task-confirmatio
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagsComponent } from './task-manager/tags/tags.component';
 import { HttpClientModule } from '@angular/common/http';
+import { TaskAddFormComponent } from './task-manager/task-add-form/task-add-form.component';
+import { TaskEditFormComponent } from './task-manager/task-edit-form/task-edit-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
     TaskDialogComponent,
     TaskConfirmationDialogComponent,
     TagsComponent,
+    TaskAddFormComponent,
+    TaskEditFormComponent,
   ],
   imports: [
     BrowserModule,
