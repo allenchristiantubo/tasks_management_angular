@@ -54,7 +54,9 @@ export class TaskEditFormComponent implements OnInit {
 
     this.taskService.editTask(task, task.taskId).subscribe({next: (data) => {
       if(data){
-        this.openSnackBar("Task saved successfully", "Close");
+        this._router.navigate(['/']).then(() => {
+          this.openSnackBar("Task updated successfully", "Close");
+        });
       }
     }});
     
@@ -71,15 +73,6 @@ export class TaskEditFormComponent implements OnInit {
       verticalPosition: 'bottom'
     };
 
-    let snackBarRef = this._snackBar.open(message, action, snackBarOpt);
-
-    snackBarRef.afterDismissed().subscribe(() =>{
-      this._router.navigate(['/']);
-    });
-    
-    snackBarRef.onAction().subscribe(() =>{
-      snackBarRef.dismiss();
-      this._router.navigate(['/']);
-    });
+    this._snackBar.open(message, action, snackBarOpt);
   }
 }

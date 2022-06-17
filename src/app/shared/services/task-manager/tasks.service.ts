@@ -42,8 +42,9 @@ export class TasksService {
     {
       return this.http.get<TaskModel[]>(this.getEndpoint('GET')).pipe(
         map(tasks => tasks.filter(t =>{
-          return (t.status === TaskStatus.New ? 'new' : t.status === TaskStatus.InProgress ? 'in progress' : 'completed').includes(searchKey.toLowerCase()) || t.taskName.toLowerCase().includes(searchKey.toLowerCase()) ||
-          t.taskDescription.toLowerCase().includes(searchKey.toLowerCase())
+          return (t.status === TaskStatus.New ? 'new' : t.status === TaskStatus.InProgress ? 'in progress' : 'completed').includes(searchKey.toLowerCase()) 
+          || t.taskName.toLowerCase().includes(searchKey.toLowerCase()) 
+          || t.taskDescription.toLowerCase().includes(searchKey.toLowerCase())
         }))
       );
     }
@@ -63,18 +64,16 @@ export class TasksService {
   }
 
   private getEndpoint(keyword:string, param?:string): any{
-    // if(keyword === 'get' || keyword == 'post'){
-    //   return `${TASKS_API_URL}`;
-    // }else if(keyword === 'getById' || keyword === 'put' || keyword === 'delete'){
-    //   return `${TASKS_API_URL}/${id}`;
-    // }
     switch(keyword){
-      case 'GET': return `${TASKS_API_URL}`;
-      case 'POST' : return `${TASKS_API_URL}`;
-      case 'GET_BY_ID': return `${TASKS_API_URL}/${param}`;
-      case 'PUT': return `${TASKS_API_URL}/${param}`;
-      case 'DELETE' : return `${TASKS_API_URL}/${param}`;
-      default: return "";
+      case 'GET':
+      case 'POST' : 
+          return `${TASKS_API_URL}`;
+      case 'GET_BY_ID':
+      case 'PUT': 
+      case 'DELETE' : 
+          return `${TASKS_API_URL}/${param}`;
+      default: 
+          return "";
     }
   }
 }

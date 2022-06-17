@@ -1,3 +1,4 @@
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
@@ -7,7 +8,13 @@ import { TasksService } from 'src/app/shared/services/task-manager/tasks.service
 @Component({
   selector: 'app-task-add-form',
   templateUrl: './task-add-form.component.html',
-  styleUrls: ['./task-add-form.component.scss']
+  styleUrls: ['./task-add-form.component.scss'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: {showError: true},
+    }
+  ]
 })
 export class TaskAddFormComponent implements OnInit {
   taskManagerFormGroup = this._formBuilder.group({
@@ -36,10 +43,11 @@ export class TaskAddFormComponent implements OnInit {
 
     this.taskService.addTask(task).subscribe({next: (data) => {
       if(data){
-        this.openSnackBar("Task saved successfully", "Close");
+        this._router.navigate(['/']).then(() => {
+          this.openSnackBar("Task created successfully", "Close");
+        });
       }
-    }});
-    
+    }}); 
   }
 
   openSnackBar(message: string, action: string) {
@@ -49,16 +57,7 @@ export class TaskAddFormComponent implements OnInit {
       verticalPosition: 'bottom'
     };
 
-    let snackBarRef = this._snackBar.open(message, action, snackBarOpt);
-
-    snackBarRef.afterDismissed().subscribe(() =>{
-      this._router.navigate(['/']);
-    });
-    
-    snackBarRef.onAction().subscribe(() =>{
-      snackBarRef.dismiss();
-      this._router.navigate(['/']);
-    });
+    this._snackBar.open(message, action, snackBarOpt);
   }
 
   onBack(){

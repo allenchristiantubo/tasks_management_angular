@@ -1,5 +1,5 @@
-<div [formGroup]="tagsFormGroup">
-    <mat-form-field class="example-chip-list" appearance="legacy">
+<div [formGroup]="tagsFormGroup" class="input-full-width">
+    <mat-form-field  appearance="outline" class="input-full-width">
         <mat-label>Tags</mat-label>
         <mat-chip-list #chipList formControlName="tag" aria-label="Tags selection">
         <mat-chip *ngFor="let tag of tagsFormGroup.controls['tag'].value" (removed)="remove(tag)">
@@ -8,7 +8,7 @@
                 <mat-icon>cancel</mat-icon>
             </button>
         </mat-chip>
-        <input placeholder="New tag..."
+        <input placeholder="New tag..." class="input-full-width"
                 [matChipInputFor]="chipList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="addOnBlur"

@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TaskAddFormComponent } from './task-manager/task-add-form/task-add-form.component';
-import { TaskEditFormComponent } from './task-manager/task-edit-form/task-edit-form.component';
-import { TaskManagerComponent } from './task-manager/task-manager.component';
+import { NotFoundPageComponent } from './shared/not-found-page/not-found-page.component';
 
 const routes: Routes = [
-  {path:'tasks/:id', component: TaskEditFormComponent},
-  {path:'tasks', component: TaskAddFormComponent},
-  {path:'', component: TaskManagerComponent},
-  {path: '**', redirectTo: '', pathMatch:'full'}
+  {path:'',
+  loadChildren: () =>
+    import('../app/task-manager/task-manager.module').then((m) => m.TaskManagerModule),
+  },
+  {path:'404', component: NotFoundPageComponent},
+  {path: '**', redirectTo:'404'}
 ];
 
 @NgModule({
